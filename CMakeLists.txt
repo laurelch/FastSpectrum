@@ -1,5 +1,8 @@
 cmake_minimum_required (VERSION 3.10 FATAL_ERROR)
+set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
 project(FastSpectrum LANGUAGES CXX CUDA)
+include_directories("/usr/local/cuda/targets/x86_64-linux/include/")
+link_directories("/usr/local/cuda/lib64/")
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "")
 cmake_policy(SET CMP0076 NEW)
