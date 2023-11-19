@@ -1,10 +1,11 @@
 #include "FastSpectrum.h"
 #include "FastSpectrumGUI.h"
+#include "Print.h"
 
 /* [MAIN FUNCTION THAT CALLS EVERYTHING ELSE] */
 int main(int argc, char *argv[])
 {
-	Eigen::SparseMatrix<double> Basis;
+	Eigen::SparseMatrix<double> Basis, M, Mbar;
 	Eigen::MatrixXd redEigVects, V;
 	Eigen::VectorXd redEigVals;
 	Eigen::MatrixXi F;
@@ -19,8 +20,9 @@ int main(int argc, char *argv[])
 	ImGui::CreateContext();
 	ImGui::StyleColorsDark();							// Set style
 
-	meshFile = "../Models/AIM894_Chinese Dragon/894_Chinese Dragon.obj";
-	fastSpectrum.computeEigenPairs(meshFile, 1000, Basis, redEigVects, redEigVals);
+	// meshFile = "../Models/AIM894_Chinese Dragon/894_Chinese Dragon.obj";
+	meshFile = "../Models/bunny.obj";
+	fastSpectrum.computeEigenPairs(meshFile, 420, Basis, redEigVects, redEigVals);
 	fastSpectrum.getV(V);
 	fastSpectrum.getF(F);
 			
@@ -29,6 +31,15 @@ int main(int argc, char *argv[])
 		showMenu(viewer, menu, fastSpectrum);		
 	};
 	/* END OF GUI FUNCTIONALITY */
+	
+	// save eigenvectors
+	
+	printMatrix(redEigVects, "../../fast-spectrum-results/eigenvector.txt");
+	printVector(redEigVals, "../../fast-spectrum-results/eigenvalue.txt");
+	fastSpectrum.getMassMatrix(M);
+	printSparseMatrix(M, "../../fast-spectrum-results/massmatrix.txt");
+	fastSpectrum.getReducedMassMatrix(Mbar);
+	printSparseMatrix(Mbar, "../../fast-spectrum-results/reducedmassmatrix.txt");
 
 	/* User interaction via keyboard */
 	const auto &key_down = [](igl::opengl::glfw::Viewer &viewer, unsigned char key, int mod)->bool

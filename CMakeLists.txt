@@ -62,7 +62,10 @@ add_executable(FastSpectrum
 	"Fast Spectrum/Utility.h"
 	"Fast Spectrum/Utility.cpp"
 	"Fast Spectrum/Visualization.h"
-	"Fast Spectrum/Visualization.cpp")
+	"Fast Spectrum/Visualization.cpp"
+	"Fast Spectrum/Print.h"
+	"Fast Spectrum/Print.cpp"
+	)
 target_link_libraries(FastSpectrum
 	PUBLIC libigl
 	PUBLIC eigen
