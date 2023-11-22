@@ -6,10 +6,12 @@
 int main(int argc, char *argv[])
 {
 	Eigen::SparseMatrix<double> Basis, M, Mbar;
-	Eigen::MatrixXd redEigVects, V;
+	Eigen::MatrixXd redEigVects, V, approxEigVects;
 	Eigen::VectorXd redEigVals;
 	Eigen::MatrixXi F;
-	string meshFile; 
+	Eigen::VectorXi Sample;
+	string meshFile;
+	int sampleSize;
 	
 	/* GUI FUNCTIONALITY */	
 	igl::opengl::glfw::Viewer			viewer;			// Set up main viewer
@@ -25,21 +27,29 @@ int main(int argc, char *argv[])
 	fastSpectrum.computeEigenPairs(meshFile, 420, Basis, redEigVects, redEigVals);
 	fastSpectrum.getV(V);
 	fastSpectrum.getF(F);
-			
-	menu.callback_draw_viewer_window = [&]()
-	{
-		showMenu(viewer, menu, fastSpectrum);		
-	};
-	/* END OF GUI FUNCTIONALITY */
-	
-	// save eigenvectors
-	
+
+	// save results in txt files
 	printMatrix(redEigVects, "../../fast-spectrum-results/eigenvector.txt");
 	printVector(redEigVals, "../../fast-spectrum-results/eigenvalue.txt");
 	fastSpectrum.getMassMatrix(M);
 	printSparseMatrix(M, "../../fast-spectrum-results/massmatrix.txt");
 	fastSpectrum.getReducedMassMatrix(Mbar);
 	printSparseMatrix(Mbar, "../../fast-spectrum-results/reducedmassmatrix.txt");
+	fastSpectrum.getSamples(Sample);
+	printVector(Sample, "../../fast-spectrum-results/sample.txt");
+	fastSpectrum.getSampleSize(sampleSize);
+	printf("The sample size is %d.\n", sampleSize);
+	fastSpectrum.getFunctionBasis(Basis);
+	printSparseMatrix(Basis, "../../fast-spectrum-results/basis.txt");
+	fastSpectrum.getApproxEigVects(approxEigVects);
+	printMatrix(approxEigVects, "../../fast-spectrum-results/approxeigenvector.txt");
+			
+	menu.callback_draw_viewer_window = [&]()
+	{
+		showMenu(viewer, menu, fastSpectrum);		
+	};
+	/* END OF GUI FUNCTIONALITY */
+
 
 	/* User interaction via keyboard */
 	const auto &key_down = [](igl::opengl::glfw::Viewer &viewer, unsigned char key, int mod)->bool

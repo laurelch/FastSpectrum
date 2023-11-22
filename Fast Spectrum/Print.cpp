@@ -13,11 +13,21 @@ void printMatrix(Eigen::MatrixXd &matrix, const string &filename){
             file << "\n";
         }
         file.close();
-        printf("Eigenvector matrix (%ldx%ld) is saved successfully.", matrix.rows(), matrix.cols());
+        printf("Eigenvector matrix (%ldx%ld) is saved successfully.\n", matrix.rows(), matrix.cols());
     }
 }
 
 void printVector(Eigen::VectorXd &vector, const string &filename){
+    std::ofstream file(filename);
+    if(file.is_open()){        
+        for(int i=0; i<vector.size(); ++i){
+            file << vector(i) << "\n";
+        }
+        file.close();
+    }
+}
+
+void printVector(Eigen::VectorXi &vector, const string &filename){
     std::ofstream file(filename);
     if(file.is_open()){        
         for(int i=0; i<vector.size(); ++i){
